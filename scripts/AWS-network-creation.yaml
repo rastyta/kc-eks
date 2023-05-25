@@ -10,6 +10,17 @@ Resources:
         - Key: Name
           Value: kcVPC
 
+  PublicSubnet:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref VPC
+      CidrBlock: 10.0.0.0/24
+      AvailabilityZone: eu-west-1a
+      MapPublicIpOnLaunch: true
+      Tags:
+        - Key: Name
+          Value: PublicSubnet
+
   PrivateSubnet1:
     Type: AWS::EC2::Subnet
     Properties:
@@ -33,6 +44,8 @@ Resources:
 Outputs:
   VPCId:
     Value: !Ref VPC
+  PublicSubnetId:
+    Value: !Ref PublicSubnet
   PrivateSubnet1Id:
     Value: !Ref PrivateSubnet1
   PrivateSubnet2Id:
