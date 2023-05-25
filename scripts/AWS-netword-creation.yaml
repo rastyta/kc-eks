@@ -8,14 +8,14 @@ Resources:
       EnableDnsHostnames: true
       Tags:
         - Key: Name
-          Value: MyVPC
+          Value: kcVPC
 
   PrivateSubnet1:
     Type: AWS::EC2::Subnet
     Properties:
       VpcId: !Ref VPC
       CidrBlock: 10.0.1.0/24
-      AvailabilityZone: us-east-1a
+      AvailabilityZone: eu-west-1a
       Tags:
         - Key: Name
           Value: PrivateSubnet1
@@ -25,7 +25,7 @@ Resources:
     Properties:
       VpcId: !Ref VPC
       CidrBlock: 10.0.2.0/24
-      AvailabilityZone: us-east-1b
+      AvailabilityZone: eu-west-1b
       Tags:
         - Key: Name
           Value: PrivateSubnet2
