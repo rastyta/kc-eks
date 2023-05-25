@@ -8,9 +8,8 @@ metadata:
 vpc:
   subnets:
     private:
-      us-east-1a: { id: subnet-d026d49a }
-      us-east-1b: { id: subnet-fedb3ffg }
-      us-east-1c: { id: subnet-b50c23eb }
+      eu-west-1a: { id: subnet-025a0fd791c653bcc }
+      eu-west-1b: { id: subnet-04fe17f228d6a7987 }
 
 nodeGroups:
   - name: ng-1-workers
