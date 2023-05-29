@@ -10,6 +10,19 @@ Resources:
         - Key: Name
           Value: kcVPC
 
+  InternetGateway:
+    Type: 'AWS::EC2::InternetGateway'
+    Properties:
+      Tags:
+        - Key: Name
+          Value: kcIGateway
+
+  VPCGatewayAttachment:
+    Type: 'AWS::EC2::VPCGatewayAttachment'
+    Properties:
+      VpcId: !Ref VPC
+      InternetGatewayId: !Ref InternetGateway
+
   PublicSubnet:
     Type: AWS::EC2::Subnet
     Properties:
@@ -19,7 +32,7 @@ Resources:
       MapPublicIpOnLaunch: true
       Tags:
         - Key: Name
-          Value: PublicSubnet
+          Value: kcPublicSubnet
 
   PrivateSubnet1:
     Type: AWS::EC2::Subnet
@@ -29,7 +42,7 @@ Resources:
       AvailabilityZone: eu-west-1a
       Tags:
         - Key: Name
-          Value: PrivateSubnet1
+          Value: kcPrivateSubneta
 
   PrivateSubnet2:
     Type: AWS::EC2::Subnet
@@ -39,14 +52,66 @@ Resources:
       AvailabilityZone: eu-west-1b
       Tags:
         - Key: Name
-          Value: PrivateSubnet2
+          Value: kcPrivateSubnetb
+
+  RouteTable:
+    Type: 'AWS::EC2::RouteTable'
+    Properties:
+      VpcId: !Ref VPC
+
+  PublicRoute:
+    Type: 'AWS::EC2::Route'
+    DependsOn: VPCGatewayAttachment
+    Properties:
+      RouteTableId: !Ref RouteTable
+      DestinationCidrBlock: '0.0.0.0/0'
+      GatewayId: !Ref InternetGateway
+
+  PublicSubnetRouteTableAssociation:
+    Type: 'AWS::EC2::SubnetRouteTableAssociation'
+    Properties:
+      SubnetId: !Ref PublicSubnet
+      RouteTableId: !Ref RouteTable
+
+  InstanceSecurityGroup:
+    Type: 'AWS::EC2::SecurityGroup'
+    Properties:
+      GroupDescription: 'Allow SSH access'
+      VpcId: !Ref VPC
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 22
+          ToPort: 22
+          CidrIp: '0.0.0.0/0'
+      Tags:
+        - Key: Name
+          Value: kcSGroup
+
+  EC2Instance:
+    Type: 'AWS::EC2::Instance'
+    Properties:
+      ImageId: ami-04f7efe62f419d9f5
+      InstanceType: t2.micro
+      KeyName: awsKeyLeoIrelandPem
+      SecurityGroupIds:
+        - !Ref InstanceSecurityGroup
+      SubnetId: !Ref PublicSubnet
+      Tags:
+        - Key: Name
+          Value: kcK8sAdmin
 
 Outputs:
   VPCId:
     Value: !Ref VPC
+
   PublicSubnetId:
     Value: !Ref PublicSubnet
+
   PrivateSubnet1Id:
     Value: !Ref PrivateSubnet1
+
   PrivateSubnet2Id:
     Value: !Ref PrivateSubnet2
+
+  EC2InstanceId:
+    Value: !Ref EC2Instance
