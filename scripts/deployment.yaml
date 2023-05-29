@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: KC-main-micro
+  name: kc-main-micro
   namespace: default
 spec:
   replicas: 2
