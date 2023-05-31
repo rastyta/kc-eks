@@ -1,20 +1,21 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: kc-main-micro
+  name: kc-deployment
   namespace: default
 spec:
   replicas: 2
   selector:
     matchLabels:
-      app: web-test
+      app: kc-main-micro
   template:
     metadata:
       labels:
-        app: web-test
+        app: kc-main-micro
     spec:
       containers:
         - name: back-end
           image: 673380487826.dkr.ecr.eu-west-1.amazonaws.com/kc-main-micro:latest
           ports:
-            - containerPort: 3000
+            - containerPort: 8080
+      imagePullPolicy: Always
