@@ -1,0 +1,55 @@
+AWSTemplateFormatVersion: "2010-09-09"
+
+Parameters:
+  VpcId:
+    Type: String
+    Description: ID of the existing VPC
+  SubnetId:
+    Type: String
+    Description: ID of the existing public subnet
+  KeyName:
+    Type: String
+    Description: Key Pair name to get access via ssh
+
+Resources:
+  CouchbaseInstance:
+    Type: AWS::EC2::Instance
+    Properties:
+      InstanceType: t3.medium
+      ImageId: ami-01dd271720c1ba44f
+      KeyName: !Ref KeyName
+      SubnetId: !Ref SubnetId
+      SecurityGroupIds:
+        - !Ref CouchbaseSecurityGroup
+      UserData:
+        Fn::Base64: !Sub |
+          #!/bin/bash
+          # Install Docker
+          sudo apt update
+          sudo apt install docker.io -y
+          sudo systemctl start docker
+          sudo systemctl enable docker
+          # Pull and run Couchbase Docker container
+          sudo docker run -d --name couchbase -p 8091-8094:8091-8094 -p 11210:11210 couchbase:community-6.0.0
+
+  CouchbaseSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Allow inbound traffic to Couchbase
+      VpcId: !Ref VpcId
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 8091
+          ToPort: 8094
+          CidrIp: 0.0.0.0/0
+        - IpProtocol: tcp
+          FromPort: 11210
+          ToPort: 11210
+          CidrIp: 0.0.0.0/0
+        - IpProtocol: tcp
+          FromPort: 22
+          ToPort: 22
+          CidrIp: 0.0.0.0/0
+      Tags:
+        - Key: Name
+          Value: CouchbaseSecurityGroup
