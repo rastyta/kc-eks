@@ -13,6 +13,7 @@ spec:
       labels:
         app: demomicro
     spec:
+      serviceAccountName: default
       containers:
         - name: back-end
           image: 673380487826.dkr.ecr.eu-west-1.amazonaws.com/demomicro:latest
