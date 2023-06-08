@@ -1,13 +1,13 @@
-kind: RoleBinding
 apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
 metadata:
-  name: endpoints-reader-binding
+  name: kc-role-binding
   namespace: default
 subjects:
   - kind: ServiceAccount
-    name: default
+    name: kc-service-account
     namespace: default
 roleRef:
   kind: Role
-  name: endpoints-reader
+  name: kc-role
   apiGroup: rbac.authorization.k8s.io
