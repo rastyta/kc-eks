@@ -5,4 +5,4 @@ metadata:
 data:
   application.yml: |-
     message:
-      value: test1
+      value: testUpdated
