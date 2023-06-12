@@ -4,4 +4,4 @@ metadata:
   name: kcmainmicro
 data:
   application.properties: |
-    message.value: test1
+    message.value=test1
