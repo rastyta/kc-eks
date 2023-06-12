@@ -3,5 +3,4 @@ apiVersion: v1
 metadata:
   name: kcmainmicro
 data:
-  message:
-    value: test1
+  message.value: test1
